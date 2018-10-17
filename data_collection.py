@@ -13,21 +13,27 @@ import matplotlib
 TRANSPARENT = "transparent"
 DOWNLOAD_FOLDER = "downloads/"
 BIRD_DATASET = "dataset/Avibase_bird_species.csv"
+BIRD_DATASET_OUTPUT = "dataset/Avibase_bird_species_output.csv"
 LIMIT = 4
 COLOR_LIMIT = 5
 START= 1
 END = 5
 
+"""
+note to self: of not run, may be dataset is empty
+"""
 
-def run(dataset, limit, start, end, color_limit):
-    with open(dataset, "r+", encoding='ISO-8859-1') as file:
+
+def run(dataset, dataset_output, limit, start, end, color_limit):
+    with open(dataset, "r", encoding='ISO-8859-1') as file:
         csv_f = csv.reader(file)
-        for row in islice(csv_f, start, end, 1):
-            search_term = row[0]  # bird species
-            process(search_term, limit,color_limit, file, row)
+        with open(dataset_output, "a", newline="") as output_file:
+            for row in islice(csv_f, start, end, 1):
+                search_term = row[0]  # bird species
+                process(search_term, limit,color_limit, output_file)
 
 
-def process(keyword, limit, color_limit, file, row):
+def process(keyword, limit, color_limit, file):
     if not _is_folder_exist(DOWNLOAD_FOLDER+keyword):
         keyword_original = keyword
         keyword = _apply_keyword_rule(keyword)
@@ -35,23 +41,19 @@ def process(keyword, limit, color_limit, file, row):
         if _count_files(DOWNLOAD_FOLDER+keyword) < limit:
             download_image(keyword, limit)
         list = []
+        keyword_for_directory = _str_eliminate_special_charater(keyword)
         if ' ' in _get_folder_name(keyword):
             _rename(DOWNLOAD_FOLDER, keyword)
-            _rename_image_files(_str_eliminate_special_charater(keyword))
-            color_processing(_str_eliminate_special_charater(keyword), color_limit, list)
-        #print(list)
+            _rename_image_files(keyword_for_directory)
+            color_processing(keyword_for_directory, color_limit, list)
+
         lst = [keyword_original]
         for x in list:
             lst.append(x)
 
-        print(lst)
-
-        ##writer = csv.writer(file)
-        #writer.writerow(lst)
-
-        print (row) d
-
-        #delete_folder(DOWNLOAD_FOLDER, keyword)
+        writer = csv.writer(file)
+        writer.writerow(lst)
+        delete_folder(DOWNLOAD_FOLDER, keyword_for_directory)
 
 
 def download_image(keyword, limit):
@@ -92,8 +94,12 @@ def _str_eliminate_special_charater(str):
 
 def delete_folder(path, folder_name):
     print ("\n\ndeleting_images...\n\n")
+
+    print(path)
+    print (folder_name)
     full_path = path+folder_name
     if os.path.exists(full_path):
+        print("exist!!")
         rmtree(full_path)
 
 
@@ -126,7 +132,7 @@ def _rgb_to_hex(rgb):
 
 
 def main():
-    run(BIRD_DATASET, LIMIT, START, END, COLOR_LIMIT)
+    run(BIRD_DATASET, BIRD_DATASET_OUTPUT, LIMIT, START, END, COLOR_LIMIT)
 
 
 if __name__ == "__main__":
