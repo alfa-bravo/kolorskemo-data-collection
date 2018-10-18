@@ -8,6 +8,7 @@ from shutil import rmtree
 from subprocess import Popen, PIPE
 import json
 import matplotlib
+import time
 
 
 TRANSPARENT = "transparent"
@@ -16,8 +17,8 @@ BIRD_DATASET = "dataset/Avibase_bird_species.csv"
 BIRD_DATASET_OUTPUT = "dataset/Avibase_bird_species_output.csv"
 LIMIT = 4
 COLOR_LIMIT = 5
-START= 1
-END = 5
+START= 60
+END = 80
 
 
 def run(dataset, dataset_output, limit, start, end, color_limit):
@@ -57,16 +58,17 @@ def process(keyword, limit, color_limit, file):
         keyword_original = keyword
         keyword = _apply_keyword_rule(keyword) # with transparent word
         download_image(keyword, limit)
-        if _count_files(DOWNLOAD_FOLDER+keyword) < limit:
-            download_image(keyword, limit)
+
         list = []
         keyword_for_directory = _str_eliminate_special_charater(keyword) # no space and '
         if ' ' in _get_folder_name(keyword):
-            #rename
+            # rename
             _rename(DOWNLOAD_FOLDER, keyword)
             _rename_image_files(keyword_for_directory)
 
-            #color processing
+            # color processing
+
+            print("keyword_for_directory, ", keyword_for_directory)
             color_processing(keyword_for_directory, color_limit, list)
 
         # write to csv
@@ -74,11 +76,10 @@ def process(keyword, limit, color_limit, file):
         for x in list:
             lst.append(x)
 
-
         writer = csv.writer(file)
         writer.writerow(lst)
 
-        #delete
+        # delete
         delete_folder(DOWNLOAD_FOLDER, keyword_for_directory)
 
 
@@ -115,6 +116,7 @@ def _rename_image_files(folder_name_with_out_space):
     """
     for dir_path, subdir_list, file_list in os.walk(DOWNLOAD_FOLDER + folder_name_with_out_space):
         for fname in file_list:
+            print("file rename to,  ", _str_eliminate_special_charater(fname))
             os.rename(dir_path +"/" + fname, dir_path +"/" + _str_eliminate_special_charater(fname))
 
 
@@ -133,10 +135,14 @@ def color_processing(keyword, color_num, list):
                 for fname in file_list:
                     img_path = os.path.abspath(dir_path+"/"+fname)
                     # call cli ek ...
-                    pipe = Popen("ek "+ img_path+" --number-of-colors "+str(color_num), shell=True, stdout=PIPE).stdout
+                    print("img path, ", img_path)
+                    ek_command = "ek "+ img_path+ " --number-of-colors "+str(color_num)
+
+                    print(ek_command)
+                    pipe = Popen(ek_command, shell=True, stdout=PIPE).stdout
                     # pipe out the json output
                     color_analysis_json = _str_to_json(pipe.read().decode("utf-8"))
-
+                    print(color_analysis_json)
                     _get_colors_analysis(color_analysis_json, list)
 
 
@@ -145,7 +151,7 @@ def _get_folder_name(keyword):
 
 
 def _str_eliminate_special_charater(str):
-    return str.replace(" ","-").replace("\'", "-")
+    return str.replace(" ","-").replace("\'", "-").replace("%", "-").replace("&", "-")
 
 
 def delete_folder(path, folder_name):
@@ -155,10 +161,8 @@ def delete_folder(path, folder_name):
     :param folder_name:
     :return:
     """
-    print ("\n\ndeleting_images...\n\n")
+    print("\n\ndeleting_images...\n\n")
 
-    print(path)
-    print (folder_name)
     full_path = path+folder_name
     if os.path.exists(full_path):
         rmtree(full_path)
@@ -219,8 +223,9 @@ def _rgb_to_hex(rgb):
 
 
 def main():
+    start_time = time.time()
     run(BIRD_DATASET, BIRD_DATASET_OUTPUT, LIMIT, START, END, COLOR_LIMIT)
-
+    print("Finished! total time: ", time.time() - start_time)
 
 if __name__ == "__main__":
     main()
