@@ -9,6 +9,7 @@ from subprocess import Popen, PIPE
 import json
 import matplotlib
 import time
+from argparse import *
 
 
 TRANSPARENT = "transparent"
@@ -67,8 +68,6 @@ def process(keyword, limit, color_limit, file):
             _rename_image_files(keyword_for_directory)
 
             # color processing
-
-            print("keyword_for_directory, ", keyword_for_directory)
             color_processing(keyword_for_directory, color_limit, list)
 
         # write to csv
@@ -116,7 +115,6 @@ def _rename_image_files(folder_name_with_out_space):
     """
     for dir_path, subdir_list, file_list in os.walk(DOWNLOAD_FOLDER + folder_name_with_out_space):
         for fname in file_list:
-            print("file rename to,  ", _str_eliminate_special_charater(fname))
             os.rename(dir_path +"/" + fname, dir_path +"/" + _str_eliminate_special_charater(fname))
 
 
@@ -136,10 +134,8 @@ def color_processing(keyword, color_num, list):
                     img_path = os.path.abspath(dir_path+"/"+fname)
                     # call cli ek ...
                     print("img path, ", img_path)
-                    ek_command = "ek "+ img_path+ " --number-of-colors "+str(color_num)
 
-                    print(ek_command)
-                    pipe = Popen(ek_command, shell=True, stdout=PIPE).stdout
+                    pipe = Popen("ek "+ img_path+ " --number-of-colors "+str(color_num), shell=True, stdout=PIPE).stdout
                     # pipe out the json output
                     color_analysis_json = _str_to_json(pipe.read().decode("utf-8"))
                     print(color_analysis_json)
@@ -223,9 +219,19 @@ def _rgb_to_hex(rgb):
 
 
 def main():
+    parser = ArgumentParser(description='Run data collection...')
+    parser.add_argument('--input_csv', default = BIRD_DATASET)
+    parser.add_argument('--output_csv', default = BIRD_DATASET_OUTPUT)
+    parser.add_argument('--limit_images_downloaded',  type=int, default=4)
+    parser.add_argument('start', type=int)
+    parser.add_argument('end', type=int)
+    parser.add_argument('--color_limit', type=int, default=5)
+    args = parser.parse_args()
+
     start_time = time.time()
-    run(BIRD_DATASET, BIRD_DATASET_OUTPUT, LIMIT, START, END, COLOR_LIMIT)
+    run(args.input_csv, args.output_csv, args.limit_images_downloaded, args.start, args.end, args.color_limit)
     print("Finished! total time: ", time.time() - start_time)
+
 
 if __name__ == "__main__":
     main()

@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="440efcae-53a4-4679-ab1f-4edc1606d394" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/data_collection.py" afterPath="$PROJECT_DIR$/data_collection.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dataset/Avibase_bird_species.csv" afterPath="$PROJECT_DIR$/dataset/Avibase_bird_species.csv" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dataset/Avibase_bird_species_output.csv" afterPath="$PROJECT_DIR$/dataset/Avibase_bird_species_output.csv" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -15,14 +12,14 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.278031">
+    <splitter split-orientation="horizontal" split-proportion="0.35095716">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file leaf-file-name="data_collection.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/data_collection.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="300">
-                  <caret line="20" column="8" lean-forward="true" selection-start-line="20" selection-start-column="8" selection-end-line="20" selection-end-column="8" />
+                <state relative-caret-position="96">
+                  <caret line="33" column="17" lean-forward="true" selection-start-line="33" selection-start-column="17" selection-end-line="33" selection-end-column="17" />
                   <folding>
                     <element signature="e#0#27#0" expanded="true" />
                   </folding>
@@ -77,8 +74,8 @@
           <file leaf-file-name="Avibase_bird_species_output.csv" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/dataset/Avibase_bird_species_output.csv">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="433">
-                  <caret line="50" column="30" lean-forward="false" selection-start-line="50" selection-start-column="30" selection-end-line="50" selection-end-column="30" />
+                <state relative-caret-position="600">
+                  <caret line="40" column="40" lean-forward="true" selection-start-line="40" selection-start-column="40" selection-end-line="40" selection-end-column="40" />
                   <folding />
                 </state>
               </provider>
@@ -384,16 +381,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/dataset/Avibase_bird_species_output.csv">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="433">
-          <caret line="50" column="30" lean-forward="false" selection-start-line="50" selection-start-column="30" selection-end-line="50" selection-end-column="30" />
+        <state relative-caret-position="600">
+          <caret line="40" column="40" lean-forward="true" selection-start-line="40" selection-start-column="40" selection-end-line="40" selection-end-column="40" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/data_collection.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="20" column="8" lean-forward="true" selection-start-line="20" selection-start-column="8" selection-end-line="20" selection-end-column="8" />
+        <state relative-caret-position="96">
+          <caret line="33" column="17" lean-forward="true" selection-start-line="33" selection-start-column="17" selection-end-line="33" selection-end-column="17" />
           <folding>
             <element signature="e#0#27#0" expanded="true" />
           </folding>
