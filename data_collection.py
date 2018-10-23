@@ -134,12 +134,17 @@ def color_processing(keyword, color_num, list):
                     img_path = os.path.abspath(dir_path+"/"+fname)
                     # call cli ek ...
                     print("img path, ", img_path)
-
-                    pipe = Popen("ek "+ img_path+ " --number-of-colors "+str(color_num), shell=True, stdout=PIPE).stdout
-                    # pipe out the json output
-                    color_analysis_json = _str_to_json(pipe.read().decode("utf-8"))
-                    print(color_analysis_json)
-                    _get_colors_analysis(color_analysis_json, list)
+                    try:
+                        pipe = Popen("ek "+ img_path+ " --number-of-colors "+str(color_num), shell=True, stdout=PIPE).stdout
+                        # pipe out the json output
+                        color_analysis_json = _str_to_json(pipe.read().decode("utf-8"))
+                        print(color_analysis_json)
+                        _get_colors_analysis(color_analysis_json, list)
+                    except Exception as e:
+                        #if img is unreadable, yes its happened!
+                        # continue w/o raising error
+                        # will lose some data
+                        pass
 
 
 def _get_folder_name(keyword):
@@ -147,7 +152,7 @@ def _get_folder_name(keyword):
 
 
 def _str_eliminate_special_charater(str):
-    return str.replace(" ","-").replace("\'", "-").replace("%", "-").replace("&", "-")
+    return str.replace(" ","-").replace("\'", "-").replace("%", "-").replace("&", "-").replace("(", "-").replace(")", "-").replace("<", "-").replace(">", "-")
 
 
 def delete_folder(path, folder_name):
@@ -206,7 +211,7 @@ def _get_colors_analysis(json, list):
     :return:
     """
     for color in json.get("colors"):
-        list.append(_rgb_to_hex(color))
+        list.append(_hex_to_decimal(_rgb_to_hex(color).replace("#","")))
 
 
 def _rgb_to_hex(rgb):
@@ -217,6 +222,15 @@ def _rgb_to_hex(rgb):
     """
     return matplotlib.colors.to_hex(rgb) # return type str
 
+
+def _hex_to_decimal(hex):
+    """
+    convert hex color to decimal
+    :param hex:
+    :return: string
+    """
+
+    return str(int(hex, 16))
 
 def main():
     parser = ArgumentParser(description='Run data collection...')
