@@ -31,6 +31,13 @@ def find_color_hex(row):
 def get_hex_color_from_name(row, data):
     return data['Hex (24 bit)'][row[1]]
 
+def get_color_id(row, data):
+    return data['Name'][row[1]]
+
+
+def get_color_id(row):
+    return data_id.loc[data_id['Name']==row[0], 'id'].item()
+
 
 def random_forest_training(X_train, X_test, y_train, y_test):
     """
