@@ -6,7 +6,7 @@ name = "pypi"
 [packages]
 ekstrakto = {git = "https://github.com/alfa-bravo/ekstrakto"}
 scipy = "==1.1.0"
-Pillow = "==5.1.0"
+Pillow = "==8.1.1"
 
 [dev-packages]
 
